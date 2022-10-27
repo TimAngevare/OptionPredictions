@@ -1,4 +1,5 @@
 <!doctype html>
+<!--run: python -m http.server -->
 <html lang="en">
   <head>
     <title>OptionPredictor</title>
@@ -18,16 +19,57 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+    <py-env>
+        - yfinance
+        - paths:
+            - ./models/Option.py
+    </py-env>
     <py-script>
+    import Option
+    import yfinance
+    options = []
     el_input = Element("input_id")
-    el_output = Element("output")
+    option_template = Element("option-template").select(".option")
+    option_list = Element("list-options-container")
 
     def calculateTkr(*ags, **kws):
         ticker = el_input.element.value
-        el_output.element.innerText = ticker
+        if not ticker:
+            return None
         el_input.clear()
+        list_options = Options.calculate(ticker)
+        for option in list_options:
+            option_id = "option-" + str(len(options))
+            option_data = {
+                "id" : option_id,
+                "option" : option.option,
+                "maturity" : option.maturity,
+                "exercise_price" : option.exercise
+            }
+            options.append(option_data)
+            option_html = option_template.clone(option_id, to=option_list)
+            option_html.select("option").innerText = option_data["option"]
+            option_html.select("maturity").innerText = option_data["maturity"]
+            option_html.select("exercise_price").innerText = option_data["exercise_price"]
+            option_list.element.appendChild(option_html.element)
     </py-script>
+    
+    <template id="option-template">
+        <section class="option">
+            <div class="row">
+                <div clas="col">
+                    <p class="option-name"></p>
+                </div>
+                <div clas="col">
+                    <p class="maturity"></p>
+                </div>
+                <div clas="col">
+                    <p class="exercise_price"></p>
+                </div>
+            </div>
+        </section>
+    </template>
+
     <div class="container">
         <div class="row">
             <h1 class="display-1 text-primary">Option predictor</h1>
@@ -46,8 +88,7 @@
             </div>
         </div>
         <br>
-        <div class="row">
-            <p id="output"></p>
+        <div class="row list-options-container">
         </div>
     </div>
 
