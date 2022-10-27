@@ -19,9 +19,9 @@ class Option:
             # Validates if maturity date is of type str
             raise TypeError('maturity date should be string')
 
-        if type(exercise_price) != 'int' or 'double':
-            # Validates if exercise price is of type integer or double
-            raise TypeError('exercise_prise must be integer or double')
+        if type(exercise_price) != 'int' or 'float':
+            # Validates if exercise price is of type integer or float
+            raise TypeError('exercise_prise must be integer or float')
 
         if type(optionType) != 'str':
             # Validates if option type is of type string
