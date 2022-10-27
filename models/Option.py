@@ -1,8 +1,9 @@
 import string
+import datetime
 from enum import Enum
 
 class Option:
-    def __init__(self, maturity_date, exercise_price, optionType) -> None:
+    def __init__(self, maturity_date, exercise_price, optionType, stock) -> None:
         """
         Class for a stock option
         @requires optionType to be either 'call' or 'put'
@@ -27,6 +28,7 @@ class Option:
             # Validates if option type is of type string
             raise TypeError('optionType must be string')
 
+        self.stock = stock;
         self.maturity_date = maturity_date
         self.exercise_price = exercise_price
 
