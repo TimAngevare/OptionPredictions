@@ -3,19 +3,18 @@ import datetime
 from enum import Enum
 
 class Option:
-    def __init__(self, maturity_date, exercise_price, optionType, stock) -> None:
+    def __init__(self, stock, maturity_date, exercise_price, optionType, volatility) -> None:
         """
         Class for a stock option
         @requires optionType to be either 'call' or 'put'
+        @param stock: gives the yfinance Tracker of the selected stock
         @param maturity_date: gives the date of maturity
         @param exercise_price: gives the price for which the price is bought
-        @param optionType: gives the type of option
+        @param optionType: gives the type of option (Either CALL or PUT)
+        @param volatility: gives the volatility of the stock
         """
 
-        class Optiontype(Enum):
-            CALL = 1
-            PUT = 2
-
+        #Evaluate parameters' types
         if type(maturity_date) != 'str':
             # Validates if maturity date is of type str
             raise TypeError('maturity date should be string')
@@ -28,13 +27,15 @@ class Option:
             # Validates if option type is of type string
             raise TypeError('optionType must be string')
 
-        self.stock = stock;
+        #Assigning all parameters
+        self.stock = stock
         self.maturity_date = maturity_date
         self.exercise_price = exercise_price
+        self.optionType = optionType
+        self.volatility = volatility
+        self.altEstimation = self.getAltEstimation()
 
-        if string.lower(optionType) == 'call':
-            self.optionType = Optiontype.CALL
-        elif string.optionType == 'put':
-            self.optionType = Optiontype.PUT
-        else:
-            raise AttributeError('Optiontype must be either call or put')
+    def getAltEstimation(self):
+        #todo: Query for yfinance's estimate
+        estimation = self.stock.recommendations
+        return estimation

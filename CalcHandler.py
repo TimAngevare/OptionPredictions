@@ -1,19 +1,54 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
+
 def getOptions(stock):
+    """
+    Calculates and generates multiple possible options and their values
+    @param stock: the stock for which the options should be generated
+    @return: the list off all options created
+    """
     result = []
     periods = ["2wk","1mo","3mo","6mo","1y","2y","3y"]
     for period in periods:
         price = stock.calc_future_price(period)
         volatility = stock.calc_volatility(period)
         maturityDate = getMaturity(period)
-        result.append(option(maturityDate))
 
+        if price > 0:
+            optionType = "call"
+        else:
+            optionType = "put"
 
+        option = option(stock, maturityDate,price,optionType, volatility)
 
-    six_months = date.today() + relativedelta(months=+6)
+        result.append(option)
+
     return result
 
+def rankOptions(options):
+    """
+    Sorts out all riskiest options and orders the top five
+    @param options: a list of all created options
+    @return: the list of options with the best five options
+    """
+
+    while len(options) > 5:
+        lowest = options.get(0)
+        for option in options:
+            if option.ranking < lowest.ranking:
+                lowest = option
+        options.remove(lowest)
+    """for x in range(0,4):
+        option = options.get(x)
+        for y in range(x,4):
+            if options.get(y).ranking > option.ranking:
+               option = options.get(y)
+    """
+    options.sort(key=rank)
+    return options
+
+def rank(e):
+    return e.ranking
 
 def getMaturity(period):
     """
