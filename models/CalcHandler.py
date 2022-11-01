@@ -8,11 +8,12 @@ def getOptions(stock):
     @return: the list off all options created
     """
     result = []
-    periods = ["2wk","1mo","3mo","6mo","1y","2y","3y"]
+    periods = ["1mo","6mo","1y","2y","3y"]
     for period in periods:
         price = stock.calc_future_price(period)
         volatility = stock.calc_volatility(period)
         maturityDate = getMaturity(period)
+        altEstimate = stock.analysis['Growth']
 
         if price > 0:
             optionType = "call"
