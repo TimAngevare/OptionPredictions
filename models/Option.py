@@ -30,5 +30,18 @@ class Option:
         estimation = self.stock.analysis['Growth']
         return estimation
 
-    def getRank(self):
+    def getRisk(self):
+        risk = 0
+        risk += self.getVolatilityRisk()
         return random()
+
+    def getVolatilityRisk(self):
+        volatility = self.volatility
+        if volatility < 0.1:
+            return 5
+        elif volatility < 0.15:
+            return 3
+        elif volatility < 0.2:
+            return 0
+        else:
+            return -5
