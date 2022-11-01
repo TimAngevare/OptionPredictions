@@ -26,7 +26,9 @@
     </py-env>
     <py-script>
     import Option
+    import CalcHandler
     import yfinance
+
     options = []
     el_input = Element("input_id")
     option_template = Element("option-template").select(".option")
@@ -37,7 +39,8 @@
         if not ticker:
             return None
         el_input.clear()
-        list_options = Options.calculate(ticker)
+        list_options = CalcHandler.getOptions(ticker)
+        list_options = CalcHandler.rankOptions(list_options)
         for option in list_options:
             option_id = "option-" + str(len(options))
             option_data = {
