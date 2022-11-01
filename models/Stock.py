@@ -12,7 +12,7 @@ class Stock:
     def calc_volatility(self, period='2wk', interval='1d'):
         historic = self.stock.history(period=period, interval=interval)
         values = [x for x in historic['Close'] if not math.isnan(x)]
-        #print(historic['Close'], len(historic['Close']))
+        print(historic['Close'], len(historic['Close']))
 
         mean = sum(values) / len(values)
         deviation = [price - mean for price in values]

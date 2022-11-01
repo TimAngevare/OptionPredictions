@@ -23,10 +23,13 @@
         - yfinance
         - paths:
             - ./models/Option.py
+            - ./models/CalcHandler.py
+            - ./models/Stock.py
     </py-env>
     <py-script>
     import Option
     import CalcHandler
+    from Stock import Stock
     import yfinance
 
     options = []
@@ -39,7 +42,8 @@
         if not ticker:
             return None
         el_input.clear()
-        list_options = CalcHandler.getOptions(ticker)
+        stock = Stock(ticker)
+        list_options = CalcHandler.getOptions(stock)
         list_options = CalcHandler.rankOptions(list_options)
         for option in list_options:
             option_id = "option-" + str(len(options))

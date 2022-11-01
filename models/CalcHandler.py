@@ -1,5 +1,9 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
+import yfinance as yf
+
+def getStockFromTicker(ticker):
+    return yf.Ticker(ticker)
 
 def getOptions(stock):
     """
@@ -8,9 +12,9 @@ def getOptions(stock):
     @return: the list off all options created
     """
     result = []
-    periods = ["1mo","6mo","1y","2y","3y"]
+    periods = ["1y","3y"]
     for period in periods:
-        price = stock.calc_future_price(period)
+        price = stock.get_future_price(period)
         volatility = stock.calc_volatility(period)
         maturityDate = getMaturity(period)
         altEstimate = stock.analysis['Growth']
