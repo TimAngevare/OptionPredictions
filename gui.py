@@ -10,12 +10,14 @@ frame_aa = Frame()
 frame_a = Frame()
 frame_b = Frame()
 
+#creates a class table
 class Table:
      
     def __init__(self,root, total_rows, total_columns, lst):
          
         # code for creating table
         for i in range(total_rows):
+            #For first row aka headers
             if i == 0:
                 for j in range(total_columns):
                     self.e = Entry(root, width=20, fg='yellow',
@@ -24,6 +26,7 @@ class Table:
                     self.e.grid(row=i, column=j)
                     self.e.insert(END, lst[i][j])
             else:
+                #Rest 
                 for j in range(total_columns):
                     
                     self.e = Entry(root, width=20, fg='green',
@@ -32,6 +35,7 @@ class Table:
                     self.e.grid(row=i, column=j)
                     self.e.insert(END, lst[i][j])
 
+#When button clicked calculates options and creates table
 def submit():
     ticker = entry.get().upper()
     entry.delete(0, 'end')
@@ -49,6 +53,7 @@ def submit():
     t.pack()
     frame_a.pack()
 
+#GUI components
 label = Label(master=frame_aa, text = "Stock", font=("Helvetica", 20))
 label.pack()
 entry = Entry(master=frame_b)
