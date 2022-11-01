@@ -13,14 +13,14 @@ def getOptions(stock):
     @return: the list off all options created
     """
     result = []
-    periods = ["1y","3y"]
+    periods = ["3mo", "1y","3y"]
     for period in periods:
         exercise_price = stock.get_future_price(False,period)
         volatility = stock.calc_volatility(period)
         maturity_date = getMaturity(period)
         altEstimate = stock.get_future_price(True,period)
 
-        if exercise_price - stock.info["previousClose"] > 0:
+        if exercise_price - stock.getStock().info["previousClose"] > 0:
             optionType = "call"
         else:
             optionType = "put"

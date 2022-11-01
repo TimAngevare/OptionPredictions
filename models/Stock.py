@@ -9,10 +9,12 @@ class Stock:
     def __str__(self) -> str:
         return self.callsign
 
+    def getStock(self):
+        return self.stock
+
     def calc_volatility(self, period='2wk', interval='1d'):
         historic = self.stock.history(period=period, interval=interval)
         values = [x for x in historic['Close'] if not math.isnan(x)]
-        print(historic['Close'], len(historic['Close']))
 
         mean = sum(values) / len(values)
         deviation = [price - mean for price in values]
@@ -82,20 +84,26 @@ class Stock:
             financials = self.stock.quarterly_financials
             bs = self.stock.quarterly_balancesheet
             cf = self.stock.quarterly_cashflow
-            kwargs = {'period': '1y'}
+            kwargs = {'period': '1y', 'interval':'1mo'}
             splice = 4
         elif when == '3y':
             financials = self.stock.financials
             bs = self.stock.balancesheet
             cf = self.stock.cashflow
-            kwargs = {'start':'2019-01-01', 'end':'2021-12-31'}
+            kwargs = {'start':'2019-01-01', 'end':'2021-12-31', 'interval': '1mo'}
             splice = 3
+        elif when == '3mo':
+            financials = self.stock.quarterly_financials
+            bs = self.stock.quarterly_balancesheet
+            cf = self.stock.quarterly_cashflow
+            kwargs = {'period': '3mo', 'interval': '1wk'}
+            splice = 1
         else:
             print("'when' param should be 1y or 3y")
             return -1
 
         #Take the historic data / filter the NaN values / splice to the correct amount of periods
-        historic = self.stock.history(interval='1mo', **kwargs)['Close']
+        historic = self.stock.history(**kwargs)['Close']
         fc = historic[historic.notnull()]
         periods = financials.keys()[:splice]
 
@@ -108,20 +116,24 @@ class Stock:
             closes = [fc[ts] for ts in fc.keys() if ts.month % 3 == 0]
         elif when =='3y':
             closes = [fc[ts] for ts in fc.keys() if ts.month == 12]
+        elif when =='3mo':
+            closes = [fc[ts] for ts in fc.keys()]
         #in the correct order
         closes.reverse()
 
         #calculate p/e ratio for every period
-        tot_pe = [price / eps_an[i] for i, price in enumerate(closes)]
+        if when == '3mo':
+            tot_pe = [price / eps_an[0] for price in closes]
+        else:
+            tot_pe = [price / eps_an[i] for i, price in enumerate(closes)]
         #take the average p/e ratio
         pe = round(sum(tot_pe) / len(tot_pe), 2)
 
         if expert == False:
             #Calculate future eps (eps * (1 + growth)_rate^periods)
             eps = eps_an[0] * ((1 + self.calc_growth_rate(eps_an, periods, bs, financials, cf)) ** len(periods))
-
         else:
-            eps = eps_an[0] * ((1 + self.ticker.analysis["Growth"]["1Y"]) ** len(periods))
+            eps = eps_an[0] * ((1 + self.stock.analysis["Growth"]["+1Y"]) ** len(periods))
 
         futureValue = pe * eps
         #return future p/e ratio * eps

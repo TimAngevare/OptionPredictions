@@ -23,7 +23,7 @@ class Option:
         self.optionType = optionType
         self.volatility = volatility
         self.altEstimation = altEstimation
-        self.ranking = self.getRank()
+        self.ranking = self.getRisk()
 
     def getRisk(self):
         risk = 0
@@ -46,7 +46,7 @@ class Option:
         exercise = self.exercise_price
         alternative = self.altEstimation
         difference = abs(alternative - exercise)
-        realPrice = self.stock.info["previousClose"]
+        realPrice = self.stock.getStock().info["previousClose"]
         if difference < (realPrice/10):
             return 5
         elif difference < ((realPrice/10)*2):
