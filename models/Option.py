@@ -5,7 +5,7 @@ from random import random
 
 
 class Option:
-    def __init__(self, stock, maturity_date, exercise_price, optionType, volatility) -> None:
+    def __init__(self, stock, maturity_date, exercise_price, optionType, volatility, altEstimation) -> None:
         """
         Class for a stock option
         @requires optionType to be either 'call' or 'put'
@@ -22,18 +22,14 @@ class Option:
         self.exercise_price = exercise_price
         self.optionType = optionType
         self.volatility = volatility
-        #self.altEstimation = self.getAltEstimation()
+        self.altEstimation = altEstimation
         self.ranking = self.getRank()
-
-    def getAltEstimation(self):
-        #todo: Query for yfinance's estimate
-        estimation = self.stock.analysis['Growth']
-        return estimation
 
     def getRisk(self):
         risk = 0
         risk += self.getVolatilityRisk()
-        return random()
+        risk += self.getComparisonRisk()
+        return risk
 
     def getVolatilityRisk(self):
         volatility = self.volatility
@@ -45,3 +41,15 @@ class Option:
             return 0
         else:
             return -5
+
+    def getComparisonRisk(self):
+        exercise = self.exercise_price
+        alternative = self.altEstimation
+        difference = abs(alternative - exercise)
+        realPrice = self.stock.info["previousClose"]
+        if difference < (realPrice/10):
+            return 5
+        elif difference < ((realPrice/10)*2):
+            return 3
+        else:
+            return -3

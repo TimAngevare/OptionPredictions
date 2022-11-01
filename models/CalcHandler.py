@@ -15,17 +15,17 @@ def getOptions(stock):
     result = []
     periods = ["1y","3y"]
     for period in periods:
-        price = stock.get_future_price(period)
+        exercise_price = stock.get_future_price(False,period)
         volatility = stock.calc_volatility(period)
-        maturityDate = getMaturity(period)
-        #altEstimate = stock.stock.analysis['Growth']
+        maturity_date = getMaturity(period)
+        altEstimate = stock.get_future_price(True,period)
 
-        if price > 0:
+        if exercise_price - stock.info["previousClose"] > 0:
             optionType = "call"
         else:
             optionType = "put"
 
-        option = Option(stock, maturityDate, price,optionType, volatility)
+        option = Option(stock, maturity_date, exercise_price,optionType, volatility,altEstimate)
 
         result.append(option)
 
