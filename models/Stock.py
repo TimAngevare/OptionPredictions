@@ -74,7 +74,7 @@ class Stock:
 
     #Calculate the future price of a stock
     #when = period (either 1y/3y)
-    def get_future_price(self, when='3y'):
+    def get_future_price(self, expert, when='3y'):
         #setting the correct financial statement sheets
         #settings the correct keyword arguments for the history period
         #setting the correct list splice length for the periods
@@ -116,8 +116,16 @@ class Stock:
         #take the average p/e ratio
         pe = round(sum(tot_pe) / len(tot_pe), 2)
 
-        #Calculate future eps (eps * (1 + growth)_rate^periods)
-        eps = eps_an[0] * ((1 + self.calc_growth_rate(eps_an, periods, bs, financials, cf)) ** len(periods))
+        if expert == False:
+            #Calculate future eps (eps * (1 + growth)_rate^periods)
+            eps = eps_an[0] * ((1 + self.calc_growth_rate(eps_an, periods, bs, financials, cf)) ** len(periods))
 
+        else:
+            eps = eps_an[0] * ((1 + self.ticker.analysis["Growth"]["1Y"]) ** len(periods))
+
+        futureValue = pe * eps
         #return future p/e ratio * eps
-        return pe * eps
+        if futureValue > 0:
+            return futureValue
+        else:
+            return 0
