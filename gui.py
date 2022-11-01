@@ -4,7 +4,7 @@ import models.CalcHandler as ch
 from models.Stock import Stock
 
 window = Tk()
-window.geometry("800x400")
+window.geometry("1100x400")
 window.eval('tk::PlaceWindow . center')
 frame_aa = Frame()
 frame_a = Frame()
@@ -40,12 +40,12 @@ def submit():
     ticker = entry.get().upper()
     entry.delete(0, 'end')
     label.config(text=ticker)
-    options = [("Option Type", "Maturity date", "Exercise price")]
+    options = [("Rank", "Option Type", "Maturity date", "Exercise price")]
     stock = Stock(ticker)
     list_options = ch.getOptions(stock)
     list_options = ch.rankOptions(list_options)
-    for option in list_options:
-        option_tuple = (option.optionType, option.maturity_date, '$' + str(round(option.exercise_price, 2)))
+    for i, option in enumerate(reversed(list_options)):
+        option_tuple = (str(i + 1), option.optionType, option.maturity_date, '$' + str(round(option.exercise_price, 2)))
         options.append(option_tuple)
     total_rows = len(options)
     total_columns = len(options[0])
