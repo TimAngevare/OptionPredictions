@@ -4,6 +4,9 @@ import models.CalcHandler as ch
 from models.Stock import Stock
 
 window = Tk()
+window.geometry("800x400")
+window.eval('tk::PlaceWindow . center')
+frame_aa = Frame()
 frame_a = Frame()
 frame_b = Frame()
 
@@ -22,29 +25,30 @@ class Table:
                 self.e.insert(END, lst[i][j])
 
 def submit():
-    ticker = entry.get()
+    ticker = entry.get().upper()
+    entry.delete(0, 'end')
     label.config(text=ticker)
     options = []
     stock = Stock(ticker)
     list_options = ch.getOptions(stock)
     list_options = ch.rankOptions(list_options)
     for option in list_options:
-        option_tuple = (option.optionType, option.maturity_date, option.exercise_price)
+        option_tuple = (option.optionType, option.maturity_date, '$' + str(round(option.exercise_price, 2)))
         options.append(option_tuple)
     total_rows = len(options)
     total_columns = len(options[0])
     t = Table(frame_a, total_rows, total_columns, options)
     t.pack()
     frame_a.pack()
-    entry.set("")
 
-label = Entry(master=frame_a, text = "Stock", font=("Helvetica", 20))
+label = Label(master=frame_aa, text = "Stock", font=("Helvetica", 20))
 label.pack()
 entry = Entry(master=frame_b)
 entry.pack()
 sub_btn=Button(master=frame_b,text = 'Submit', command = submit)
 sub_btn.pack()
 
+frame_aa.pack()
 frame_a.pack()
 frame_b.pack()
 
