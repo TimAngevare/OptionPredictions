@@ -1,4 +1,5 @@
 from tkinter import *
+
 import models.CalcHandler as ch
 from models.Stock import Stock
 
@@ -22,6 +23,7 @@ class Table:
 
 def submit():
     ticker = entry.get()
+    label.config(text=ticker)
     options = []
     stock = Stock(ticker)
     list_options = ch.getOptions(stock)
@@ -36,6 +38,8 @@ def submit():
     frame_a.pack()
     entry.set("")
 
+label = Entry(master=frame_a, text = "Stock", font=("Helvetica", 20))
+label.pack()
 entry = Entry(master=frame_b)
 entry.pack()
 sub_btn=Button(master=frame_b,text = 'Submit', command = submit)
@@ -44,5 +48,6 @@ sub_btn.pack()
 frame_a.pack()
 frame_b.pack()
 
+window.title("Option predictor")
 window.mainloop()
 
