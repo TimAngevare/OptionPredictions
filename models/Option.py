@@ -26,10 +26,7 @@ class Option:
         self.ranking = self.getRisk()
 
     def getRisk(self):
-        risk = 0
-        risk += self.getVolatilityRisk()
-        risk += self.getComparisonRisk()
-        return risk
+        return  self.getVolatilityRisk() + self.getComparisonRisk()
 
     def getVolatilityRisk(self):
         volatility = self.volatility
