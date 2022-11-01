@@ -16,19 +16,27 @@ class Table:
          
         # code for creating table
         for i in range(total_rows):
-            for j in range(total_columns):
-                 
-                self.e = Entry(root, width=20, fg='green',
+            if i == 0:
+                for j in range(total_columns):
+                    self.e = Entry(root, width=20, fg='yellow',
                                font=('Arial',20,'bold'))
                  
-                self.e.grid(row=i, column=j)
-                self.e.insert(END, lst[i][j])
+                    self.e.grid(row=i, column=j)
+                    self.e.insert(END, lst[i][j])
+            else:
+                for j in range(total_columns):
+                    
+                    self.e = Entry(root, width=20, fg='green',
+                                font=('Arial',20,'bold'))
+                    
+                    self.e.grid(row=i, column=j)
+                    self.e.insert(END, lst[i][j])
 
 def submit():
     ticker = entry.get().upper()
     entry.delete(0, 'end')
     label.config(text=ticker)
-    options = []
+    options = [("Option Type", "Maturity date", "Exercise price")]
     stock = Stock(ticker)
     list_options = ch.getOptions(stock)
     list_options = ch.rankOptions(list_options)
