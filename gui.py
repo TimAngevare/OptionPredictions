@@ -10,25 +10,37 @@ frame_aa = Frame()
 frame_a = Frame()
 frame_b = Frame()
 
+#creates a class table
 class Table:
      
     def __init__(self,root, total_rows, total_columns, lst):
          
         # code for creating table
         for i in range(total_rows):
-            for j in range(total_columns):
-                 
-                self.e = Entry(root, width=20, fg='green',
+            #For first row aka headers
+            if i == 0:
+                for j in range(total_columns):
+                    self.e = Entry(root, width=20, fg='yellow',
                                font=('Arial',20,'bold'))
                  
-                self.e.grid(row=i, column=j)
-                self.e.insert(END, lst[i][j])
+                    self.e.grid(row=i, column=j)
+                    self.e.insert(END, lst[i][j])
+            else:
+                #Rest 
+                for j in range(total_columns):
+                    
+                    self.e = Entry(root, width=20, fg='green',
+                                font=('Arial',20,'bold'))
+                    
+                    self.e.grid(row=i, column=j)
+                    self.e.insert(END, lst[i][j])
 
+#When button clicked calculates options and creates table
 def submit():
     ticker = entry.get().upper()
     entry.delete(0, 'end')
     label.config(text=ticker)
-    options = []
+    options = [("Option Type", "Maturity date", "Exercise price")]
     stock = Stock(ticker)
     list_options = ch.getOptions(stock)
     list_options = ch.rankOptions(list_options)
@@ -41,6 +53,7 @@ def submit():
     t.pack()
     frame_a.pack()
 
+#GUI components
 label = Label(master=frame_aa, text = "Stock", font=("Helvetica", 20))
 label.pack()
 entry = Entry(master=frame_b)
