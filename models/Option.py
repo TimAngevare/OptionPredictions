@@ -1,6 +1,8 @@
 import string
 import datetime
 from enum import Enum
+from random import random
+
 
 class Option:
     def __init__(self, stock, maturity_date, exercise_price, optionType, volatility) -> None:
@@ -34,8 +36,12 @@ class Option:
         self.optionType = optionType
         self.volatility = volatility
         self.altEstimation = self.getAltEstimation()
+        self.ranking = self.getRank()
 
     def getAltEstimation(self):
         #todo: Query for yfinance's estimate
-        estimation = self.stock.recommendations
+        estimation = self.stock.analysis['Growth']
         return estimation
+
+    def getRank(self):
+        return random.random()
