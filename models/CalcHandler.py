@@ -1,6 +1,7 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
 import yfinance as yf
+from .Option import Option
 
 def getStockFromTicker(ticker):
     return yf.Ticker(ticker)
@@ -17,14 +18,14 @@ def getOptions(stock):
         price = stock.get_future_price(period)
         volatility = stock.calc_volatility(period)
         maturityDate = getMaturity(period)
-        altEstimate = stock.analysis['Growth']
+        #altEstimate = stock.stock.analysis['Growth']
 
         if price > 0:
             optionType = "call"
         else:
             optionType = "put"
 
-        option = option(stock, maturityDate,price,optionType, volatility)
+        option = Option(stock, maturityDate, price,optionType, volatility)
 
         result.append(option)
 

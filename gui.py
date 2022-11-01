@@ -1,5 +1,5 @@
 from tkinter import *
-import models.CalcHandler
+import models.CalcHandler as ch
 from models.Stock import Stock
 
 window = Tk()
@@ -24,8 +24,8 @@ def submit():
     ticker = entry.get()
     options = []
     stock = Stock(ticker)
-    list_options = CalcHandler.getOptions(stock)
-    list_options = CalcHandler.rankOptions(list_options)
+    list_options = ch.getOptions(stock)
+    list_options = ch.rankOptions(list_options)
     for option in list_options:
         option_tuple = (option.optionType, option.maturity_date, option.exercise_price)
         options.append(option_tuple)

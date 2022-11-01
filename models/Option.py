@@ -16,26 +16,13 @@ class Option:
         @param volatility: gives the volatility of the stock
         """
 
-        #Evaluate parameters' types
-        if type(maturity_date) != 'str':
-            # Validates if maturity date is of type str
-            raise TypeError('maturity date should be string')
-
-        if type(exercise_price) != 'int' or 'float':
-            # Validates if exercise price is of type integer or float
-            raise TypeError('exercise_prise must be integer or float')
-
-        if type(optionType) != 'str':
-            # Validates if option type is of type string
-            raise TypeError('optionType must be string')
-
         #Assigning all parameters
         self.stock = stock
         self.maturity_date = maturity_date
         self.exercise_price = exercise_price
         self.optionType = optionType
         self.volatility = volatility
-        self.altEstimation = self.getAltEstimation()
+        #self.altEstimation = self.getAltEstimation()
         self.ranking = self.getRank()
 
     def getAltEstimation(self):
@@ -44,4 +31,4 @@ class Option:
         return estimation
 
     def getRank(self):
-        return random.random()
+        return random()
