@@ -5,11 +5,12 @@ class Option:
         """
         Class for a stock option
         @requires optionType to be either 'call' or 'put'
-        @param stock: gives the yfinance Tracker of the selected stock
+        @param stock: gives an object of class Stock
         @param maturity_date: gives the date of maturity
         @param exercise_price: gives the price for which the price is bought
         @param optionType: gives the type of option (Either CALL or PUT)
         @param volatility: gives the volatility of the stock
+        @param altEstimation: gives the exercises price measured using experts' growth rate
         """
 
         #Assigning all parameters
@@ -45,6 +46,7 @@ class Option:
             return -5
 
     def getComparisonRisk(self):
+
         exercise = self.exercise_price
         alternative = self.altEstimation
         difference = abs(alternative - exercise)

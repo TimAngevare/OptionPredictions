@@ -15,18 +15,25 @@ def getOptions(stock):
     result = []
     periods = ["3mo", "1y","3y"]
     for period in periods:
+        #exercise price is calculated with own growth rate
         exercise_price = stock.get_future_price(False,period)
+        #volatility is calculated based on given interval
         volatility = stock.calc_volatility(period)
+        #maturity date is calculated based on given interval
         maturity_date = getMaturity(period)
+        #exercise price is calculated with experts' growth rate
         altEstimate = stock.get_future_price(True,period)
 
+        #option is determined to be call or put depending on exercise price
         if exercise_price - stock.getStock().info["previousClose"] > 0:
             optionType = "call"
         else:
             optionType = "put"
 
+        #the option is generated with all calculated values
         option = Option(stock, maturity_date, exercise_price,optionType, volatility,altEstimate)
 
+        #the generated option is added to all options
         result.append(option)
 
     return result
